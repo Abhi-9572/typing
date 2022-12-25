@@ -44,6 +44,10 @@ body{
 .word{
  margin:5px;
 }
+.hidden-input{
+    border:2px solid blue;
+    opacity:0;
+}
 
 
 `
