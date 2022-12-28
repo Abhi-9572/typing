@@ -14,6 +14,7 @@ body{
     color:white;
     padding:0;
     margin:0;
+    transition:all 0.25s linear;
 }
 
 .container{
@@ -47,6 +48,44 @@ body{
 .hidden-input{
     border:2px solid blue;
     opacity:0;
+}
+.correct{
+    color:green;
+}
+.incorrect{
+    color:red;
+}
+
+.blinking{
+    border-left:1px solid;
+    animation:blink 2s infinite;
+    animation-timing-function:ease;
+
+    @keyframes blink
+    {
+        0%{border-left-color:#fff;}
+        20%{border-left-color:#000;}
+        40%{border-left-color:#fff;}
+        60%{border-left-color:#000;}
+        100%{border-left-color:#fff}
+    }
+
+   
+}
+
+.right{
+    border-right:1px solid;
+    animation:blinkRight 2s infinite;
+    animation-timing-function:ease;
+
+    @keyframes blinkRight
+    {
+        0%{border-right-color:#fff;}
+        20%{border-right-color:#000;}
+        40%{border-right-color:#fff;}
+        60%{border-right-color:#000;}
+        100%{border-right-color:#fff}
+    }    
 }
 
 
