@@ -88,5 +88,47 @@ body{
     }    
 }
 
+   
+.upperMenu
+{
+    display:flex;
+    width:1000px;
+    justify-content:space-between;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+.rightSection{
+    display:flex;
+    // padding-right:10px
+    gap:10px
+}
+.time:hover{
+    color:red;
+    cursor:pointer
+}
+.statsBox{
+    display:flex;
+    max-width:1000px;
+    height:auto;
+    margin-left:auto;
+    margin-right:auto;
+}
+ .title{
+    font-size:20px;
+    color:grey;
+ }
+
+ .subtitle{
+    font-size:30px;
+    color:gold;
+ }
+.leftStats{
+    width:30%;
+    padding:30px;
+}
+.rightStats{
+    width:70%;
+}
 
 `
