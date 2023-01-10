@@ -10,8 +10,8 @@ export const GlobalStyle=createGlobalStyle`
 }
 
 body{
-    background:black;
-    color:white;
+    background:${({theme})=> theme.background};
+    color: ${({theme})=> theme.title};
     padding:0;
     margin:0;
     transition:all 0.25s linear;
@@ -62,12 +62,11 @@ body{
     animation-timing-function:ease;
 
     @keyframes blink
-    {
-        0%{border-left-color:#fff;}
-        20%{border-left-color:#000;}
-        40%{border-left-color:#fff;}
-        60%{border-left-color:#000;}
-        100%{border-left-color:#fff}
+    {0% {border-left-color:${({theme})=> theme.title};}
+    25% {border-left-color:${({theme})=> theme.background};}
+    50% {border-left-color:${({theme})=> theme.title};}
+    75% {border-left-color:${({theme})=> theme.background};}
+    100% {border-left-color:${({theme})=> theme.title};}
     }
 
    
@@ -80,11 +79,11 @@ body{
 
     @keyframes blinkRight
     {
-        0%{border-right-color:#fff;}
-        20%{border-right-color:#000;}
-        40%{border-right-color:#fff;}
-        60%{border-right-color:#000;}
-        100%{border-right-color:#fff}
+        0% {border-left-color:${({theme})=> theme.title};}
+        25% {border-left-color:${({theme})=> theme.background};}
+        50% {border-left-color:${({theme})=> theme.title};}
+        75% {border-left-color:${({theme})=> theme.background};}
+        100% {border-left-color:${({theme})=> theme.title};}
     }    
 }
 
@@ -96,6 +95,7 @@ body{
     justify-content:space-between;
     margin-left:auto;
     margin-right:auto;
+    color: ${({theme})=> theme.typeBoxText}
 }
 
 .rightSection{
@@ -123,12 +123,25 @@ body{
     font-size:30px;
     color:gold;
  }
+ .title1{
+    font-size:10px;
+    color:red;
+ }
 .leftStats{
     width:30%;
     padding:30px;
 }
 .rightStats{
     width:70%;
+}
+
+.footer{
+    display:flex;
+    justify-content:space-between;
+    width:1000px;
+    margin-left:auto;
+    margin-right:auto;
+    height:60px;
 }
 
 `

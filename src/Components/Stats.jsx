@@ -17,6 +17,7 @@ const Stats = ({wpm,accuracy,graphData,correctChar,incorrectChars,missedChars,ex
             <div className="title">Accuracy</div>
             <div className="subtitle">{accuracy}%</div>
             <div className="title">Characters</div>
+            <div className="title1">(Correct/InCorrect/Missed/Extra)</div>
             <div className="subtitle">{correctChar}/{incorrectChars}/{missedChars}/{extraChars}</div> {/* char/incorect/missed/extra */}
         </div>
         <div className="rightStats">

@@ -1,21 +1,38 @@
 
+import { ThemeProvider } from 'styled-components';
 import './App.css';
+import Footer from './Components/Footer';
 import Typing from './Components/Typing';
-import {GlobalStyle} from './Styles/global'
+import { useTheme } from './Context/ThemeContext';
+import { GlobalStyle } from './Styles/global'
 // var randomWords = require('random-words');
 
 function App() {
   // var words=randomWords(50);
+  const {theme}=useTheme()
+  // console.log(theme);
+
+  // let theme1={
+  //   label: 'Red Theme',
+  //   background: 'red',
+  //   title: "white",
+  //   typeBoxText: 'blue',
+  //   stats: 'purple'
+  // }
   return (
-    <div className='container'>
-      <GlobalStyle/>
-      <h1>Header</h1>
-      <Typing />
-      <h1>Footer</h1>
-    </div>
+
+    <ThemeProvider theme={theme}>
+      <div className='container'>
+        <GlobalStyle />
+        <h1>Header</h1>
+        <Typing />
+        <Footer />
+      </div>
+     </ThemeProvider>
 
 
-   
+
+
   );
 }
 
