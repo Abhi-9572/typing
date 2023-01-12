@@ -104,7 +104,7 @@ body{
     gap:10px
 }
 .time:hover{
-    color:red;
+    color: ${({theme})=> theme.title};
     cursor:pointer
 }
 .statsBox{
@@ -124,8 +124,8 @@ body{
     color:gold;
  }
  .title1{
-    font-size:10px;
-    color:red;
+    font-size:15px;
+    color:white;
  }
 .leftStats{
     width:30%;
@@ -135,7 +135,7 @@ body{
     width:70%;
 }
 
-.footer{
+.footer,.header{
     display:flex;
     justify-content:space-between;
     width:1000px;
