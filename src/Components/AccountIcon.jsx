@@ -62,7 +62,7 @@ const AccountIcon = () => {
             setOpen(true);
         }
     }
-    console.log(user);
+    
 
     const classes=useStyle();
       const {theme} = useTheme();

@@ -1,7 +1,9 @@
 import { Box,TextField,Button } from '@material-ui/core'
 import React, { useState } from 'react'
+import { useAlert } from '../Context/AlertContext';
 import { useTheme } from '../Context/ThemeContext'
 import { auth } from '../firebaseConfig';
+import errorMapping from '../Utils/ErrorMessage';
 
 const SignupForm = ({handleClose}) => {
     const [email, setEmail] = useState('');
@@ -9,19 +11,47 @@ const SignupForm = ({handleClose}) => {
     const [username, setUsername] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const{theme}=useTheme()
-
+    const{setAlert}=useAlert();
    
     const handleSubmit=()=>
     {
+        if(!email || !password || !confirmPassword){
+            setAlert({
+                open: true,
+                type: 'warning',
+                message: 'Please enter all details'
+            });
+            return;
+        }
+
+        if(password!==confirmPassword){
+            setAlert({
+                open: true,
+                type: 'warning',
+                message: 'Password Mismatch'
+            });
+            return;
+        }
         // console.log("y");
         auth.createUserWithEmailAndPassword(email,password).then((ok)=>
         {
-            alert("user created")
+            // alert("user created")
+            setAlert({
+                open: true,
+                type: 'success',
+                message: 'Account created'
+            });
             handleClose();
         })
+    
         .catch((err)=>
         {
-            alert("not able to create")
+            console.log(err);
+            setAlert({
+                open: true,
+                type: 'error',
+                message: errorMapping[err.code] || "Some error occured"
+            });
         })
     }
   return (

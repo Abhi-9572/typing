@@ -2,6 +2,7 @@
 import { Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import './App.css';
+import AlertSnackbar from './Components/Alert';
 import Footer from './Components/Footer';
 import Header from './Components/Header';
 import Typing from './Components/Typing';
@@ -27,10 +28,14 @@ function App() {
   //   stats: 'purple'
   // }
   return (
+    <>
+     <AlertSnackbar/>
     <Routes>
       <Route path="/" element={<HomePage/>}/>
       <Route path="/user" element={<UserPage/>}/>
     </Routes>
+    </>
+   
 
     
 
