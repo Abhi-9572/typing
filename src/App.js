@@ -27,14 +27,16 @@ function App() {
   //   typeBoxText: 'blue',
   //   stats: 'purple'
   // }
+
   return (
-    <>
+    <ThemeProvider theme={theme}>
+      <GlobalStyle/>
      <AlertSnackbar/>
     <Routes>
       <Route path="/" element={<HomePage/>}/>
       <Route path="/user" element={<UserPage/>}/>
     </Routes>
-    </>
+    </ThemeProvider>
    
 
     

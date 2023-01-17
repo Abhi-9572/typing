@@ -13,6 +13,7 @@ import GoogleButton from 'react-google-button';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { useAlert } from '../Context/AlertContext';
 
+
 const useStyle=makeStyles(()=>({
     modal: {
         display: 'flex',
@@ -27,10 +28,12 @@ const useStyle=makeStyles(()=>({
     }
 }))
 
+
+
 const AccountIcon = () => {
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState(0)
-
+    const{setAlert}=useAlert();
     const navigate=useNavigate()
     const handleValueChange = (e, v) => {
         setValue(v)
@@ -44,15 +47,28 @@ const AccountIcon = () => {
         auth.signOut()
         .then((ok)=>
         {
-            alert("logged out")
+            setAlert(
+                {
+                    open:true,
+                    type:"success",
+                    message:"logged out"
+                }
+            )
         })
         .catch((err)=>
         {
-            alert("not able to log out")
+            setAlert(
+                {
+                    open:true,
+                    type:"success",
+                    message:"not able to log out"
+                }
+            )
+            
         })
     }
     
-    const[user]=useAuthState(auth)
+    const[user]=useAuthState(auth) //doubt
     const handleAccountIconClick=()=>
     {
         
@@ -66,7 +82,7 @@ const AccountIcon = () => {
         }
     }
     
-    const{setAlert}=useAlert();
+   
     const classes=useStyle();
     const {theme} = useTheme();
     const googleProvider=new GoogleAuthProvider();// as GoogleAuthProvider is a object

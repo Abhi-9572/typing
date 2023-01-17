@@ -120,7 +120,7 @@ const Typing = ({  }) => {
                 allChildrenSpans[currCharIndex].className = allChildrenSpans[currCharIndex].className.replace("blinking", "")
             }
 
-            console.log(wordSpanRef[currWordIndex + 1].current.querySelector('span'));
+            
             // after pressing space cursor move to the next first char of nexr word
             wordSpanRef[currWordIndex + 1].current.querySelector('span').className = "char blinking"
             return;

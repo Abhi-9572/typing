@@ -12,6 +12,7 @@ const SignupForm = ({handleClose}) => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const{theme}=useTheme()
     const{setAlert}=useAlert();
+//    console.log(theme);
    
     const handleSubmit=()=>
     {
