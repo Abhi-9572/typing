@@ -4,9 +4,15 @@ const TestModeContext=createContext();
 export const TestModeContextProvider=({children})=>
 {
     const[testTime,setTestTime]=useState(15);
+    const[testWord,setTestWord]=useState(10);
+    const[testMode,setTestMode]=useState("time")
     const values={
         testTime,
-        setTestTime
+        setTestTime,
+        testWord,
+        setTestWord,
+        testMode,
+        setTestMode
     }
 
     return(

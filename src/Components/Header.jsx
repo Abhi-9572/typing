@@ -1,5 +1,6 @@
 import React from 'react'
 import AccountIcon from './AccountIcon'
+import CompareButton from './CompareButton'
 
 const Header = () => {
   return (
@@ -7,6 +8,9 @@ const Header = () => {
         <div className="logo">
             LOGO
         </div>
+        <div>
+              <CompareButton/>
+            </div>
         <div className="icons">
             <AccountIcon/>
         </div>

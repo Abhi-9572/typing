@@ -102,6 +102,8 @@ body::-webkit-scrollbar{
     color: ${({theme})=> theme.typeBoxText}
 }
 
+
+
 .rightSection{
     display:flex;
     // padding-right:10px
@@ -139,13 +141,31 @@ body::-webkit-scrollbar{
     width:70%;
 }
 
-.footer,.header{
+.footer{
     display:flex;
+    flex-direction:column;
     justify-content:space-between;
     width:1000px;
     margin-left:auto;
     margin-right:auto;
+    align-items:center;
     height:60px;
+}
+.header{
+    display:flex;
+    
+    justify-content:space-between;
+    width:1000px;
+    margin-left:auto;
+    margin-right:auto;
+    
+    height:60px;
+}
+
+.actual-footer{
+    display: flex;
+    justify-content: space-between;
+    width:1000px;
 }
 
 .result-graph,.table
@@ -164,7 +184,7 @@ body::-webkit-scrollbar{
     align-text: center;
 }
 .user{
-    width: 50%;
+    width: 70%;
     display: flex;
     margin-top: 30px;
     margin-bottom: 30px;
@@ -173,7 +193,7 @@ body::-webkit-scrollbar{
     border-right: 2px solid;
 }
 .info{
-    width: 60%;
+    width: 40%;
     padding: 1rem;
     margin-top: 1rem;
 }
@@ -182,7 +202,7 @@ body::-webkit-scrollbar{
 }
 .total-tests{
     width: 50%;
-    font-size: 3rem;
+    font-size: 2.5rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -221,6 +241,27 @@ body::-webkit-scrollbar{
         padding: 2.5px 5px;
         border-radius: 4px; 
     }
+}
+
+.time-modes, .word-modes{
+    display:flex;
+}
+.time, .no-of-word{
+    margin-right:5px;
+}
+.time:hover, .no-of-word:hover{
+    color:${({theme})=>theme.typeBoxText};
+    cursor: pointer;
+}
+.mode:hover{
+    color:${({theme})=>theme.typeBoxText};
+    cursor: pointer;
+}
+.reset-btn{
+    display:block;
+     margin:auto;
+    transform:scale(2)
+
 }
 `
 

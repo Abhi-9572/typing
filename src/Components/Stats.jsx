@@ -3,8 +3,9 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { useAlert } from '../Context/AlertContext';
 import { auth, db } from '../firebaseConfig';
 import Graph from './Graph'
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
 
-const Stats = ({ wpm, accuracy, graphData, correctChar, incorrectChars, missedChars, extraChars }) => {
+const Stats = ({ wpm, accuracy, graphData, correctChar, incorrectChars, missedChars, extraChars,reset }) => {
   const { setAlert } = useAlert();
   const [user] = useAuthState(auth)
   var timeSet = new Set();
@@ -75,6 +76,7 @@ const Stats = ({ wpm, accuracy, graphData, correctChar, incorrectChars, missedCh
         <div className="title">Characters</div>
         <div className="title1">(Correct/InCorrect/Missed/Extra)</div>
         <div className="subtitle">{correctChar}/{incorrectChars}/{missedChars}/{extraChars}</div> {/* char/incorect/missed/extra */}
+      <RestartAltIcon onClick={reset} className='reset-btn'/>
       </div>
       <div className="rightStats">
         <Graph graphData={newGraph} />

@@ -1,3 +1,5 @@
+import { DialogTitle } from '@material-ui/core';
+import { Dialog } from '@mui/material';
 import React, { createRef, useEffect, useMemo, useRef, useState } from 'react'
 import { useTestMode } from '../Context/TestMode';
 import Stats from './Stats';
@@ -5,43 +7,50 @@ import UpperMenu from './UpperMenu';
 
 var randomWords = require('random-words');
 
-const Typing = ({  }) => {
-
+const Typing = ({ }) => {
+    const { testTime, setTestTime, testWord, setTestWord, setTestMode, testMode } = useTestMode()
     const [currWordIndex, setcurrWordIndex] = useState(0)
     const [currCharIndex, setcurrCharIndex] = useState(0)
-    const [counterDown, setCounterDown] = useState(15);
+    const [counterDown, setCounterDown] = useState(() => {
+        if (testMode == 'word') {
+            counterDown(180);
+        }
+        else {
+            return testTime;
+        }
+    }
+
+    );
     const [typingStart, setTypingStart] = useState(false)
     const [typingOver, setTypingOver] = useState(false)
-    const[intervalId,setIntervalId]=useState(null)
-    const[correctChar,setCorrectChar]=useState(0);
-    const[correctWord,setCorrectWord]=useState(0);
-    const[incorrectChars,setIncorectChars]=useState(0)
-    const[missedChars,setMissedChars]=useState(0);
-    const[extraChars,setExtraChars]=useState(0);
+    const [intervalId, setIntervalId] = useState(null)
+    const [correctChar, setCorrectChar] = useState(0);
+    const [correctWord, setCorrectWord] = useState(0);
+    const [incorrectChars, setIncorectChars] = useState(0)
+    const [missedChars, setMissedChars] = useState(0);
+    const [extraChars, setExtraChars] = useState(0);
     const [graphData, setGraphData] = useState([]);
-    const[wordArray,setWordArray]=useState(()=>
-    {
+    const [wordArray, setWordArray] = useState(() => {
+        if (testMode == 'word') {
+            return randomWords(testWord)
+        }
         return randomWords(100);
-    }) 
-
-    const words=useMemo(()=>
-    {
+    })
+    const [openDialog, setOpenDialog] = useState(false)
+    const words = useMemo(() => {
         return wordArray
-    },[wordArray])
+    }, [wordArray])
 
-    const wordSpanRef=useMemo(()=>
-    {
+    const wordSpanRef = useMemo(() => {
         return Array(words.length).fill(0).map(() => createRef());
-    },[words])
+    }, [words])
 
-   
 
-    const resetWordSpanRefClassName=()=>
-    {
-        wordSpanRef.map((index)=>{
-            Array.from(index.current.childNodes).map((j)=>
-            {
-                j.className="char"
+
+    const resetWordSpanRefClassName = () => {
+        wordSpanRef.map((index) => {
+            Array.from(index.current.childNodes).map((j) => {
+                j.className = "char"
             })
         })
         wordSpanRef[0].current.childNodes[0].className = "char blinking"
@@ -51,7 +60,7 @@ const Typing = ({  }) => {
     // const wordSpanRef = Array(words.length).fill(0).map(() => createRef())
     // console.log(wordSpanRef[0]);
 
-    const { testTime } = useTestMode();
+
 
     function counter() {
         let intervalId = setInterval(timer, 1000);
@@ -60,12 +69,12 @@ const Typing = ({  }) => {
         function timer() {
             setCounterDown((prevCount) => {
 
-                
-                setCorrectChar((correctChar)=>{
-                    setGraphData((data)=>{
 
-                        // const startTime = (testMode==='words')?180:testTime;
-                        return [...data,[testTime-prevCount,Math.round((correctChar/5)/((testTime-prevCount+1)/60))]];
+                setCorrectChar((correctChar) => {
+                    setGraphData((data) => {
+
+                        const startTime = (testMode === 'word') ? 180 : testTime;
+                        return [...data, [startTime - prevCount, Math.round((correctChar / 5) / ((startTime - prevCount + 1) / 60))]];
                     });
                     return correctChar;
                 });
@@ -81,32 +90,42 @@ const Typing = ({  }) => {
     }
 
 
-
     const keyPress = (e) => {
         if (!typingStart) {
             counter();
             setTypingStart(true)
         }
-
-
         //console.log(e);
-        //console.log(e.key);//pressed key
+        // console.log(e.key);//pressed key
+        //console.log(e.keyCode)
         // console.log(wordSpanRef[0].current);
         let allChildrenSpans = wordSpanRef[currWordIndex].current.querySelectorAll('span')
         // console.log(allChildrenSpans);
         // console.log(allChildrenSpans[currCharIndex].innerText);//present 
 
+        // -----------tab logic-----------//
+        if (e.keyCode === 9) {
+            if (typingStart) {
+                clearInterval(intervalId)
+            }
+            e.preventDefault();
+            setOpenDialog(true);
+            return;
+        }
 
         // -----------space logic-----------//
         if (e.keyCode === 32) {
+            if (currWordIndex === wordArray.length - 1) {
+                clearInterval(intervalId);
+                setTypingOver(true)
+                return;
+            }
 
-
-            const correctchar=wordSpanRef[currWordIndex].current.querySelectorAll('.correct')
-            const inCorrectchar=wordSpanRef[currWordIndex].current.querySelectorAll('.incorrect')
-           setMissedChars(missedChars+(allChildrenSpans.length-(correctchar.length+inCorrectchar.length)))
-            if(correctchar.length===allChildrenSpans.length)
-            {
-                setCorrectWord(correctWord+1);
+            const correctchar = wordSpanRef[currWordIndex].current.querySelectorAll('.correct')
+            const inCorrectchar = wordSpanRef[currWordIndex].current.querySelectorAll('.incorrect')
+            setMissedChars(missedChars + (allChildrenSpans.length - (correctchar.length + inCorrectchar.length)))
+            if (correctchar.length === allChildrenSpans.length) {
+                setCorrectWord(correctWord + 1);
             }
             setcurrWordIndex(currWordIndex + 1)
             setcurrCharIndex(0);
@@ -120,7 +139,7 @@ const Typing = ({  }) => {
                 allChildrenSpans[currCharIndex].className = allChildrenSpans[currCharIndex].className.replace("blinking", "")
             }
 
-            
+
             // after pressing space cursor move to the next first char of nexr word
             wordSpanRef[currWordIndex + 1].current.querySelector('span').className = "char blinking"
             return;
@@ -162,21 +181,21 @@ const Typing = ({  }) => {
             allChildrenSpans[currCharIndex - 1].className = allChildrenSpans[currCharIndex - 1].className.replace("right", "")
             wordSpanRef[currWordIndex].current.append(newSpan)
             setcurrCharIndex(currCharIndex + 1);
-            setExtraChars(extraChars+1);
+            setExtraChars(extraChars + 1);
             return;
         }
 
         if (e.key == allChildrenSpans[currCharIndex].innerText) {
             // console.log("corect");
             allChildrenSpans[currCharIndex].className = "char correct"
-            setCorrectChar(correctChar+1);
+            setCorrectChar(correctChar + 1);
             setcurrCharIndex(currCharIndex + 1)
         }
         else {
             // console.log("incorrect");
             allChildrenSpans[currCharIndex].className = "char incorrect"
             setcurrCharIndex(currCharIndex + 1)
-            setIncorectChars(incorrectChars+1);
+            setIncorectChars(incorrectChars + 1);
         }
 
         if (currCharIndex + 1 == allChildrenSpans.length) {
@@ -188,31 +207,85 @@ const Typing = ({  }) => {
 
     }
 
-   
+    const handleDialogBoxEvents = (e) => {
 
-    function reset()
-    {
-        let random=randomWords(100);
-        setWordArray(random)
+        if (e.keyCode === 32) {
+            //logic for redo game
+            e.preventDefault();
+            redoTest();
+            setOpenDialog(false);
+            return;
+        }
+        if (e.keyCode === 9 || e.keyCode === 13) {
+            //logic for reset game
+            e.preventDefault();
+            reset();
+            setOpenDialog(false);
+            return;
+        }
+
+        e.preventDefault();
+        setOpenDialog(false);
+        counter();
+    }
+
+    const redoTest = () => {
+        setcurrCharIndex(0);
+        setcurrWordIndex(0);
+        setTypingStart(false);
+        setTypingOver(false);
+        clearInterval(intervalId);
+        if (testMode === 'word') {
+            setCounterDown(180);
+            setTestTime(180);
+        }
+        else {
+            setCounterDown(testTime);
+            setTestTime(testTime);
+        }
+        setGraphData([]);
+        setCorrectChar(0);
+        setCorrectWord(0);
+        setExtraChars(0);
+       setIncorectChars(0);
+        setMissedChars(0);
+        resetWordSpanRefClassName();
+        inputFocus();
+    }
+    function reset() {
         setcurrWordIndex(0);
         setcurrCharIndex(0)
         setTypingStart(false);
         setTypingOver(false);
         setCounterDown(testTime)
         clearInterval(intervalId)
-        resetWordSpanRefClassName()
 
-       
+        if (testMode == 'word') {
+            let random = randomWords(testWord);
+            setWordArray(random)
+            setCounterDown(180)
+        }
+        else {
+            let random = randomWords(100);
+            setWordArray(random)
+        }
+
+        setGraphData([]);
+        setCorrectChar(0);
+        setCorrectWord(0);
+        setExtraChars(0);
+        setIncorectChars(0);
+        setMissedChars(0);
+        resetWordSpanRefClassName();
+        inputFocus();
     }
-    const calculateWPM=()=>
-    {
-        return (Math.round((correctChar/5)/(testTime/60)))
+    const calculateWPM = () => {
+        return Math.round((correctChar / 5) / ((graphData[graphData.length - 1][0] + 1) / 60))
     }
-    const calculateAccuracry=()=>
-    {
-        return (Math.round((correctWord/currWordIndex)*100))
+    const calculateAccuracry = () => {
+        return (Math.round((correctWord / currWordIndex) * 100))
     }
-   
+
 
     const inputFocus = () => {
         inputRef.current.focus();
@@ -220,7 +293,7 @@ const Typing = ({  }) => {
 
     useEffect(() => {
         reset();
-    }, [testTime])
+    }, [testTime, testMode, testWord])
 
 
     useEffect(() => {
@@ -229,17 +302,19 @@ const Typing = ({  }) => {
     }, [])
     return (
         <div>
-            <UpperMenu counterDown={counterDown} />
+           
             {
-                typingOver ? (<Stats wpm={calculateWPM()} 
-                accuracy={calculateAccuracry()} 
-                graphData={graphData} 
-                correctChar={correctChar}
-                incorrectChars={incorrectChars}
-                missedChars={missedChars}
-                extraChars={extraChars}
+                typingOver ? (<Stats reset={reset} wpm={calculateWPM()}
+                    accuracy={calculateAccuracry()}
+                    graphData={graphData}
+                    correctChar={correctChar}
+                    incorrectChars={incorrectChars}
+                    missedChars={missedChars}
+                    extraChars={extraChars}
                 />) :
-                    (
+                
+                    (<>
+                        <UpperMenu counterDown={counterDown} currWordIndex={currWordIndex} />
                         <div className="typing-box" onClick={inputFocus}>
                             <div className="words">
                                 {words.map((word, index) =>
@@ -253,6 +328,7 @@ const Typing = ({  }) => {
                                 ))}
                             </div>
                         </div>
+                        </>
                     )
             }
 
@@ -261,7 +337,28 @@ const Typing = ({  }) => {
                 className='hidden-input'
                 onKeyDown={(e) => keyPress(e)}
             />
+             <Dialog 
+            open={openDialog}
+            style={{
+                backdropFilter: 'blur(2px)'
+            }}
+            PaperProps={{
+                style: {
+                    backgroundColor:'transparent',
+                    boxShadow: 'none'
+                }
+            }}
+            onKeyDown={handleDialogBoxEvents}
+            >
+                <DialogTitle>
+                    <div className="instruction">press space to redo</div>
+                    <div className="instruction">press Tab/Enter to restart</div>
+                    <div className="instruction">press any other key to exit</div>
+                </DialogTitle>
+            </Dialog>
         </div>
+
+
     )
 }
 

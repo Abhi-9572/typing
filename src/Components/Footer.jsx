@@ -13,6 +13,12 @@ const Footer = () => {
     }
   return (
     <div className="footer">
+      <div className="intructions" style={{alignItem:'center'}}>
+        <div className="hint">
+          press <kbd>TAB</kbd> to open commands
+        </div>
+      </div>
+      <div className='actual-footer'>
         <div className="footerLink">
             link
         </div>
@@ -24,6 +30,7 @@ const Footer = () => {
           defaultValue={{value:defaultTheme, label:defaultTheme.label}}
           />
         </div>
+    </div>
     </div>
   )
 }

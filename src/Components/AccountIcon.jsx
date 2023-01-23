@@ -6,7 +6,7 @@ import LoginForm from './LoginForm';
 import SignupForm from './SignupForm';
 import { useTheme } from '../Context/ThemeContext';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { auth } from '../firebaseConfig';
+import { auth, db } from '../firebaseConfig';
 import {useAuthState, useSignInWithGoogle} from 'react-firebase-hooks/auth'
 import { useNavigate } from 'react-router-dom';
 import GoogleButton from 'react-google-button';
@@ -88,19 +88,19 @@ const AccountIcon = () => {
     const googleProvider=new GoogleAuthProvider();// as GoogleAuthProvider is a object
     const useSignInWithGoogle=()=>
     {
-        signInWithPopup(auth,googleProvider)
-        .then((res)=>
-        {
-            setAlert(
-                {
-                    open:true,
-                    type:"success",
-                    message:"Logged In with Google"
-                }
-            )
+        signInWithPopup(auth,googleProvider).then(async(response)=>{
+            const username = response.user.email.split('@')[0];
+            const ref= await db.collection('usernames').doc(username).set({
+                uid: response.user.uid
+            });
+            setAlert({
+                open: true,
+                type: 'success',
+                message: 'login successful'
+            });
             handleClose();
         })
-        .catch((err)=>
+        .catch((err)=> 
         {
             setAlert(
                 {
